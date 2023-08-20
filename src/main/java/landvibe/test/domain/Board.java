@@ -12,7 +12,10 @@ public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
-    private Long id;
+    private Long boardId;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member creator;
     @Column(name = "TITLE")
     private String title;
     @Column(name = "REGION")
@@ -35,14 +38,13 @@ public class Board {
     private Boolean room;
     @Column(name = "MEAL")
     private Boolean meal;
-    @Column(name = "CREATOR_NAME")
-    private String creatorName;
     @Column(name = "CREATOR_NUMBER")
     private String creatorNumber;
 
     @Builder
-    public Board(String title, String region, String location, String deadline, String workTerm, String workDay, String workHour,
-                 Long pay, String type, Boolean room, Boolean meal, String creatorName, String creatorNumber) {
+    public Board(Member creator, String title, String region, String location, String deadline, String workTerm, String workDay, String workHour,
+                 Long pay, String type, Boolean room, Boolean meal, String creatorNumber) {
+        this.creator = creator;
         this.title = title;
         this.region = region;
         this.location = location;
@@ -54,7 +56,23 @@ public class Board {
         this.type = type;
         this.room = room;
         this.meal = meal;
-        this.creatorName = creatorName;
+        this.creatorNumber = creatorNumber;
+    }
+
+    @Builder
+    public Board(String title, String region, String location, String deadline, String workTerm, String workDay, String workHour,
+                 Long pay, String type, Boolean room, Boolean meal, String creatorNumber) {
+        this.title = title;
+        this.region = region;
+        this.location = location;
+        this.deadline = deadline;
+        this.workTerm = workTerm;
+        this.workDay = workDay;
+        this.workHour = workHour;
+        this.pay = pay;
+        this.type = type;
+        this.room = room;
+        this.meal = meal;
         this.creatorNumber = creatorNumber;
     }
 }
