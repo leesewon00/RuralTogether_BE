@@ -2,7 +2,6 @@ package landvibe.test.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import landvibe.test.RegionName;
-import landvibe.test.controller.form.BoardForm;
 import landvibe.test.domain.Board;
 import landvibe.test.domain.Member;
 import landvibe.test.service.BoardService;
