@@ -4,6 +4,7 @@ import landvibe.test.domain.Member;
 import landvibe.test.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void save(Member member) {
         memberRepository.save(member);
     }
@@ -21,7 +23,7 @@ public class MemberService {
     }
 
     public Optional<Member> login(Member member) {
-        return memberRepository.findByEmailAndPasswordAndApprove(member.getEmail(), member.getPassword(), true);
+        return memberRepository.findByEmailAndPassword(member.getEmail(), member.getPassword());
     }
 
     public Optional<Member> getByEmail(String name) {

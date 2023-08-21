@@ -18,17 +18,22 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/new")
-    public ResponseEntity createMember(Member member) {
+    public ResponseEntity createMember(@RequestBody Member member) {
         memberService.save(member);
         return ResponseEntity.ok(memberService.getByEmail(member.getEmail()));
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(Member member1, HttpSession session) {
-        Optional<Member> member = memberService.login(member1);
-        if (member.isEmpty()) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    public ResponseEntity login(@RequestBody Member member, HttpSession session) {
+        Optional<Member> findMember = memberService.login(member);
+
+        if (findMember.isEmpty()) {
+            return ResponseEntity.badRequest().body("아이디 또는 비밀번호 불일치");
         }
+        if (findMember.get().getApprove().equals(false)) {
+            return ResponseEntity.badRequest().body("승인 대기중인 회원");
+        }
+
         session.setAttribute("loginMember", member);
         return new ResponseEntity(HttpStatus.OK);
     }
