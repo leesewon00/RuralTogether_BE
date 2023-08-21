@@ -4,6 +4,7 @@ import landvibe.test.domain.Member;
 import landvibe.test.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,10 +18,13 @@ public class AdminService {
         return members;
     }
 
+    @Transactional
     public void approveMember(Long memberId) {
         Member member = memberRepository.findById(memberId).get();
         member.setApprove(true);
     }
+
+    @Transactional
     public void refuseMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
