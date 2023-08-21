@@ -34,7 +34,13 @@ public class MemberController {
             return ResponseEntity.badRequest().body("승인 대기중인 회원");
         }
 
-        session.setAttribute("loginMember", member);
+        session.setAttribute("loginMember", findMember.get());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(HttpSession session) {
+        session.invalidate();
         return new ResponseEntity(HttpStatus.OK);
     }
 
