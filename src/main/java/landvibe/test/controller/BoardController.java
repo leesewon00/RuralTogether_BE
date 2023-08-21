@@ -34,13 +34,13 @@ public class BoardController {
     @PostMapping("/new")
     public ResponseEntity<Board> create(@RequestBody Board board) {
         Long id = boardService.saveBoard(board);
-        Board boardById = boardService.getBoardById(id).get(); // optional , 에러 발생 가능
+        Board boardById = boardService.getBoardById(id).get(); // optional , 에러 발생 가능, 프론트에서 처리해야함
         return ResponseEntity.ok(boardById);
     }
 
     @GetMapping("/{boardId}")
     public ResponseEntity<Board> getBoard(@PathVariable Long boardId) {
-        Board boardById = boardService.getBoardById(boardId).get(); // optional, 에러 발생 가능
+        Board boardById = boardService.getBoardById(boardId).get(); // optional, 에러 발생 가능, 프론트에서 처리해야함
         return ResponseEntity.ok(boardById);
     }
 
