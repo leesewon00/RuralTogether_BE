@@ -22,8 +22,8 @@ public class BoardService {
     @Transactional
     public Long saveBoard(Member member, Board board) {
         board.setCreator(member); // 없는 맴버면 에러발생 가능, 에러 로직 아직 X
-        boardRepository.save(board);
-        return board.getBoardId();
+        Board saved = boardRepository.save(board);
+        return saved.getBoardId();
     }
 
     public List<Board> getAllBoard() {

@@ -35,12 +35,11 @@ public class BoardController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity<Board> create(@RequestBody Board board, HttpServletRequest request) {
+    public ResponseEntity<Long> create(@RequestBody Board board, HttpServletRequest request) {
         Member creator = (Member) request.getSession().getAttribute("loginMember");
 
         Long boardId = boardService.saveBoard(creator, board);
-        Board boardById = boardService.getBoardById(boardId).get(); // board find 하지 말고, boardId 만 리턴하면 될듯?
-        return ResponseEntity.ok(boardById);
+        return ResponseEntity.ok(boardId);
     }
 
     @GetMapping("")
@@ -60,7 +59,7 @@ public class BoardController {
         return ResponseEntity.ok(boardById);
     }
 
-    @GetMapping("/boards/keyword")
+    @GetMapping("/keyword")
     public ResponseEntity<List<Board>> getBoardsByKeyword(@RequestParam String keyword) {
         //세션 확인 안해도 되겠지?
 
@@ -74,7 +73,7 @@ public class BoardController {
      * enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 같은 string 을 쏴야함
      */
 
-    @GetMapping("/boards/region")
+    @GetMapping("/region")
     public ResponseEntity<List<Board>> getBoardsByRegion(@RequestParam RegionName region) {
         //세션 확인 안해도 되겠지?
 
