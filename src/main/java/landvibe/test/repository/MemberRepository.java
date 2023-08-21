@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findByApproveFalse();
 
-    Optional<Member> findByEmailAndPassword(String email, String password);
+    Optional<Member> findByEmailAndPasswordAndApprove(String email, String password, Boolean approve);
 
     Optional<Member> findByEmail(String email);
 
