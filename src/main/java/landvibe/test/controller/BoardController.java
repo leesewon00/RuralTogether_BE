@@ -36,25 +36,10 @@ public class BoardController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity<Board> create(@RequestBody BoardForm form, HttpServletRequest request) {
-        Board board = Board.builder()
-                .title(form.getTitle())
-                .region(form.getRegion())
-                .location(form.getLocation())
-                .deadline(form.getDeadline())
-                .workTerm(form.getWorkTerm())
-                .workDay(form.getWorkDay())
-                .workHour(form.getWorkHour())
-                .pay(form.getPay())
-                .type(form.getType())
-                .room(form.getRoom())
-                .meal(form.getMeal())
-                .creatorNumber(form.getCreatorNumber())
-                .build();
-
+    public ResponseEntity<Board> create(@RequestBody Board board, HttpServletRequest request) {
         Member creator = (Member) request.getSession().getAttribute("loginMember");
 
-        Long boardId = boardService.saveBoard(creator.getMemberId(), board);
+        Long boardId = boardService.saveBoard(creator, board);
         Board boardById = boardService.getBoardById(boardId).get(); // board find 하지 말고, boardId 만 리턴하면 될듯?
         return ResponseEntity.ok(boardById);
     }

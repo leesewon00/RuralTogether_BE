@@ -20,10 +20,8 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveBoard(Long creatorId, Board board) {
-        //맴버 조회
-        Optional<Member> member = memberRepository.findById(creatorId);
-        board.setCreator(member.get()); // 없는 맴버면 에러발생 가능, 에러 로직 아직 X
+    public Long saveBoard(Member member, Board board) {
+        board.setCreator(member); // 없는 맴버면 에러발생 가능, 에러 로직 아직 X
         boardRepository.save(board);
         return board.getBoardId();
     }
