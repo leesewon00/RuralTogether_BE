@@ -3,6 +3,7 @@ package landvibe.test.controller;
 import landvibe.test.domain.Member;
 import landvibe.test.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,18 +16,20 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/members")
-    public List<Member> list() {
+    public ResponseEntity list() {
         List<Member> members = adminService.findMembersApproveFalse();
-        return members;
+        return ResponseEntity.ok(members);
     }
 
     @PostMapping("/members/approve/{memberId}") // 승인
-    public void approve(@PathVariable Long memberId) {
+    public ResponseEntity approve(@PathVariable Long memberId) {
         adminService.approveMember(memberId);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/members/refuse/{memberId}") // 거부
-    public void refuse(@PathVariable Long memberId) {
+    public ResponseEntity refuse(@PathVariable Long memberId) {
         adminService.refuseMember(memberId);
+        return ResponseEntity.ok().build();
     }
 }
