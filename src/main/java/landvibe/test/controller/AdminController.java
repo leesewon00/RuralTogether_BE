@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin")
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "")
 public class AdminController {
     private final AdminService adminService;
 
