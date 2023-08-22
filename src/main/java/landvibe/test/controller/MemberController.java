@@ -19,6 +19,9 @@ public class MemberController {
 
     @PostMapping("/new")
     public ResponseEntity createMember(@RequestBody Member member) {
+        if(memberService.getByEmail(member.getEmail()).isPresent()){
+            return ResponseEntity.badRequest().body("이미 등록되어 있는 회원입니다.");
+        }
         memberService.save(member);
         return ResponseEntity.ok(memberService.getByEmail(member.getEmail()));
     }
