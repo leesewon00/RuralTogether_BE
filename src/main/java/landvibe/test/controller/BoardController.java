@@ -59,7 +59,7 @@ public class BoardController {
         return ResponseEntity.ok(boardById);
     }
 
-    @GetMapping("/boards/keyword")
+    @GetMapping("/keyword")
     public ResponseEntity<List<Board>> getBoardsByKeyword(@RequestParam String keyword) {
         //세션 확인 안해도 되겠지?
 
@@ -73,7 +73,7 @@ public class BoardController {
      * enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 같은 string 을 쏴야함
      */
 
-    @GetMapping("/boards/region")
+    @GetMapping("/region")
     public ResponseEntity<List<Board>> getBoardsByRegion(@RequestParam RegionName region) {
         //세션 확인 안해도 되겠지?
 
