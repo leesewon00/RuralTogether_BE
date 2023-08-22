@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/members")
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "")
 public class MemberController {
     private final MemberService memberService;
 
