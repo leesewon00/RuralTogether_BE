@@ -1,7 +1,6 @@
 package landvibe.test.controller;
 
 import landvibe.test.domain.Member;
-import landvibe.test.exception.RuralException;
 import landvibe.test.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +22,13 @@ public class AdminController {
     }
 
     @PostMapping("/members/approve/{memberId}") // 승인
-    public ResponseEntity approve(@PathVariable Long memberId) throws RuralException {
+    public ResponseEntity approve(@PathVariable Long memberId) {
         adminService.approveMember(memberId);
         return ResponseEntity.ok().body("승인되었습니다.");
     }
 
     @PostMapping("/members/refuse/{memberId}") // 거부
-    public ResponseEntity refuse(@PathVariable Long memberId) throws RuralException {
+    public ResponseEntity refuse(@PathVariable Long memberId) {
         adminService.refuseMember(memberId);
         return ResponseEntity.ok().body("거부되었습니다.");
     }

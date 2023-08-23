@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import landvibe.test.RegionName;
 import landvibe.test.domain.Board;
 import landvibe.test.domain.Member;
+import landvibe.test.exception.RuralException;
 import landvibe.test.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +36,14 @@ public class BoardController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity<Long> create(@RequestBody Board board, HttpServletRequest request) {
-        Member creator = (Member) request.getSession().getAttribute("loginMember");
+    public ResponseEntity create(@RequestBody Board board, HttpServletRequest request) {
+        Object creator = request.getSession().getAttribute("loginMember");
+        if (creator == null) {
+            throw new RuralException("게시글은 로그인 뒤 작성할 수 있습니다.");
+        }
 
-        Long boardId = boardService.saveBoard(creator, board);
-        return ResponseEntity.ok(boardId);
+        Long boardId = boardService.saveBoard((Member) creator, board);
+        return ResponseEntity.ok().body("게시글 등록 성공");
     }
 
     @GetMapping("")
@@ -54,7 +58,7 @@ public class BoardController {
     public ResponseEntity<Board> getBoard(@PathVariable("boardId") Long boardId) {
         //세션 확인 안해도 되겠지?
 
-        Board boardById = boardService.getBoardById(boardId).get(); // optional, 에러 발생 가능, optional 로 보내진 정보 프론트에서 처리해야함
+        Board boardById = boardService.getBoardById(boardId);
         // api로 넘겨줄 때는 form으로 바꿔서 전송해주는 것이 좋다. 그러나 일단 두자.
         return ResponseEntity.ok(boardById);
     }
@@ -69,8 +73,7 @@ public class BoardController {
     }
 
     /**
-     * @param region
-     * enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 같은 string 을 쏴야함
+     * @param region enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 같은 string 을 쏴야함
      */
 
     @GetMapping("/region")
