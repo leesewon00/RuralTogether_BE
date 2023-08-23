@@ -2,7 +2,7 @@ package landvibe.test.exception;
 
 public class RuralException extends RuntimeException{
 
-    RuralException(String message){
+    public RuralException(String message){
         super(message);
     }
 }

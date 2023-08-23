@@ -1,6 +1,7 @@
 package landvibe.test.service;
 
 import landvibe.test.domain.Member;
+import landvibe.test.exception.RuralException;
 import landvibe.test.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,21 +24,21 @@ public class AdminService {
     }
 
     @Transactional
-    public void approveMember(Long memberId) throws Exception {
+    public void approveMember(Long memberId) throws RuralException {
         Optional<Member> byId = memberRepository.findById(memberId);
         if(byId.isEmpty()){
             // 존재하지 않는 회원
-            throw new Exception();
+            throw new RuralException("존재하지 않는 회원");
         }
         byId.get().setApprove(true);
     }
 
     @Transactional
-    public void refuseMember(Long memberId) throws Exception {
+    public void refuseMember(Long memberId) throws RuralException {
         Optional<Member> byId = memberRepository.findById(memberId);
         if(byId.isEmpty()){
             // 존재하지 않는 회원
-            throw new Exception();
+            throw new RuralException("존재하지 않는 회원");
         }
         memberRepository.deleteById(memberId);
     }

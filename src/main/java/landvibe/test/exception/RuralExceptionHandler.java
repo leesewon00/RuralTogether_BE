@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class RuralExceptionHandler {
     @ExceptionHandler(RuralException.class)
-    public ResponseEntity blogExceptionHandler(RuralException e) {
+    public ResponseEntity ruralExceptionHandler(RuralException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
