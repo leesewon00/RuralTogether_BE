@@ -2,9 +2,9 @@ package landvibe.test.controller;
 
 import jakarta.servlet.http.HttpSession;
 import landvibe.test.domain.Member;
+import landvibe.test.exception.RuralException;
 import landvibe.test.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +19,12 @@ public class MemberController {
 
     @PostMapping("/new")
     public ResponseEntity createMember(@RequestBody Member member) {
-        if(memberService.getByEmail(member.getEmail()).isPresent()){
-            return ResponseEntity.badRequest().body("이미 등록되어 있는 회원입니다.");
+        if (memberService.getByEmail(member.getEmail()).isPresent()) {
+            // email 중복 예외처리
+            throw new RuralException("이미 등록되어 있는 회원입니다.");
         }
         memberService.save(member);
-        return ResponseEntity.ok(memberService.getByEmail(member.getEmail()));
+        return ResponseEntity.ok(memberService.getByEmail(member.getEmail()).get());
     }
 
     @PostMapping("/login")
@@ -31,20 +32,20 @@ public class MemberController {
         Optional<Member> findMember = memberService.login(member);
 
         if (findMember.isEmpty()) {
-            return ResponseEntity.badRequest().body("아이디 또는 비밀번호 불일치");
+            throw new RuralException("아이디 또는 비밀번호 불일치");
         }
         if (findMember.get().getApprove().equals(false)) {
-            return ResponseEntity.badRequest().body("승인 대기중인 회원");
+            throw new RuralException("승인 대기중인 회원");
         }
 
         session.setAttribute("loginMember", findMember.get());
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("로그인 성공");
     }
 
     @PostMapping("/logout")
     public ResponseEntity logout(HttpSession session) {
         session.invalidate();
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("로그아웃 성공");
     }
 
 }
