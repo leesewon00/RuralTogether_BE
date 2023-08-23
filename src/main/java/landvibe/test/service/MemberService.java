@@ -42,4 +42,10 @@ public class MemberService {
     public Member login(String email, String password) {
         return checkValidMember(email, password);
     }
+
+    public Member getById(Long id) {
+        return memberRepository.findById(id).orElseThrow(
+                () -> new RuralException("해당하는 회원이 존재하지 않습니다.")
+        );
+    }
 }

@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import landvibe.test.domain.Member;
 import landvibe.test.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -35,5 +37,11 @@ public class MemberController {
             session.invalidate();
         }
         return LOGOUT_SUCCESS.getDetail();
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity memberById(@PathVariable("memberId") Long id) {
+        Member member = memberService.getById(id);
+        return new ResponseEntity(member, HttpStatus.OK);
     }
 }
