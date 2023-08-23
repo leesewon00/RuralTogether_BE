@@ -8,6 +8,7 @@ import landvibe.test.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static landvibe.test.exception.ErrorCode.*;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ReviewController {
                                  @RequestBody Reviews review, HttpServletRequest request) {
         Object creator = request.getSession().getAttribute("loginMember");
         if (creator == null) {
-            throw new RuralException("리뷰는 로그인 뒤 작성할 수 있습니다.");
+            throw new RuralException(SESSION_EXPIRATION_STATUS);
         }
 
         reviewService.saveReview(boardId, (Member) creator, review);

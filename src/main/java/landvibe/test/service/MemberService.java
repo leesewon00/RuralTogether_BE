@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static landvibe.test.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
@@ -45,7 +43,7 @@ public class MemberService {
 
     public Member getById(Long id) {
         return memberRepository.findById(id).orElseThrow(
-                () -> new RuralException("해당하는 회원이 존재하지 않습니다.")
+                () -> new RuralException(NOT_FOUND_MEMBER)
         );
     }
 }

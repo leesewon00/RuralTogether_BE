@@ -9,6 +9,7 @@ import landvibe.test.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static landvibe.test.exception.ErrorCode.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ReviewService {
     public void saveReview(Long boardId, Member creator, Reviews review) {
         Optional<Board> byId = boardRepository.findById(boardId);
         if (byId.isEmpty()) {
-            throw new RuralException("리뷰는 존재하는 공고에만 작성할 수 있습니다.");
+            throw new RuralException(NOT_FOUND_BOARD);
         }
         review.setTargetBoard(byId.get());
         review.setCreator(creator);
