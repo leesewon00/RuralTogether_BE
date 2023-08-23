@@ -4,13 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import landvibe.test.RegionName;
 import landvibe.test.domain.Board;
 import landvibe.test.domain.Member;
-import landvibe.test.exception.RuralException;
 import landvibe.test.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static landvibe.test.Message.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,69 +20,39 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    /**
-     * -boards
-     * <p>
-     * 게시글 등록 [post]  /boards/new
-     * (@RequestBody Blog blog 사용)
-     * <p>
-     * 게시글 상세 조회 [get]  /boards/{boardId}
-     * (@PathVariable long boardId 사용)
-     * <p>
-     * 게시글 키워드(제목)로 리스팅 [get]  /boards?keyword=${keyword}
-     * (@RequestParam string keyword 사용)
-     * <p>
-     * 게시글 카테고리(지역)으로 리스팅 [get]  /boards?region=${region}
-     * (@RequestParam string region 사용)
-     */
-
     @PostMapping("/new")
-    public ResponseEntity create(@RequestBody Board board, HttpServletRequest request) {
+    public String createBoard(@RequestBody Board board, HttpServletRequest request) {
         Object creator = request.getSession().getAttribute("loginMember");
-        if (creator == null) {
-            throw new RuralException("게시글은 로그인 뒤 작성할 수 있습니다.");
-        }
-
-        Long boardId = boardService.saveBoard((Member) creator, board);
-        return ResponseEntity.ok().body("게시글 등록 성공");
+        boardService.saveBoard((Member) creator, board);
+        return VALID_BOARD_CREATE.getDetail();
     }
 
     @GetMapping("")
     public ResponseEntity<List<Board>> getBoards() {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getAllBoard();
-        return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
+        return ResponseEntity.ok(boards);
     }
 
     @GetMapping("/{boardId}")
     public ResponseEntity<Board> getBoard(@PathVariable("boardId") Long boardId) {
-        //세션 확인 안해도 되겠지?
-
-        Board boardById = boardService.getBoardById(boardId);
-        // api로 넘겨줄 때는 form으로 바꿔서 전송해주는 것이 좋다. 그러나 일단 두자.
-        return ResponseEntity.ok(boardById);
+        Board board = boardService.getBoardById(boardId);
+        return ResponseEntity.ok(board);
     }
 
     @GetMapping("/keyword")
     public ResponseEntity<List<Board>> getBoardsByKeyword(@RequestParam String keyword) {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getBoardsByKeyword(keyword);
-        // api로 넘겨줄 때는 form으로 바꿔서 전송해주는 것이 좋다. 그러나 일단 두자.
-        return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
+        return ResponseEntity.ok(boards);
     }
 
     /**
-     * @param region enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 같은 string 을 쏴야함
+     * @param region enum, 에러 발생가능. 클라이언트에서 반드시 enum 데이터와 호환 가능한 string 을 쏴야함
      */
 
     @GetMapping("/region")
     public ResponseEntity<List<Board>> getBoardsByRegion(@RequestParam RegionName region) {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getBoardsByRegion(region.message);
-        return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
+        return ResponseEntity.ok(boards);
     }
 
 }

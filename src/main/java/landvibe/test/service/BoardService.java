@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static landvibe.test.exception.ErrorCode.*;
+
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -19,16 +21,16 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
+    private Member checkValidMember(Long memberId){
+       return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuralException(NOT_FOUND_MEMBER));
+    }
+
     @Transactional
-    public Long saveBoard(Member member, Board board) {
-        Optional<Member> byId = memberRepository.findById(member.getMemberId());
-        if (byId.isEmpty()) {
-            // 없는 맴버면 에러발생 가능
-            throw new RuralException("존재하지 않는 회원");
-        }
+    public void saveBoard(Member member, Board board) {
+        checkValidMember(member.getMemberId());
         board.setCreator(member);
-        Board saved = boardRepository.save(board);
-        return saved.getBoardId();
+        boardRepository.save(board);
     }
 
     public List<Board> getAllBoard() {
@@ -46,12 +48,7 @@ public class BoardService {
     }
 
     public Board getBoardById(Long boardId) {
-        Optional<Board> byId = boardRepository.findById(boardId);
-        if (byId.isEmpty()) {
-            // 없는 게시글이면 에러발생 가능
-            throw new RuralException("존재하지 않는 게시글");
-        }
-        return boardRepository.findById(boardId).get();
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuralException(NOT_FOUND_BOARD));
     }
-
 }

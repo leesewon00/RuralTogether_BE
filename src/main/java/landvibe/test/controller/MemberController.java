@@ -2,14 +2,14 @@ package landvibe.test.controller;
 
 import jakarta.servlet.http.HttpSession;
 import landvibe.test.domain.Member;
-import landvibe.test.exception.RuralException;
 import landvibe.test.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+
+import static landvibe.test.Message.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -19,22 +19,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/new")
-    public ResponseEntity createMember(@RequestBody Member member) {
+    public String createMember(@RequestBody Member member) {
         memberService.save(member);
-        return new ResponseEntity("회원가입 성공", HttpStatus.OK);
+        return VALID_MEMBER_CREATE.getDetail();
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Member member, HttpSession session) {
-        Member findMember = memberService.login(member);
-        session.setAttribute("loginMember", findMember);
-        return new ResponseEntity("로그인 성공", HttpStatus.OK);
+    public String login(@RequestBody Member member, HttpSession session) {
+        member = memberService.login(member.getEmail(), member.getPassword());
+        session.setAttribute("loginMember", member);
+        return LOGIN_SUCCESS.getDetail();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpSession session) {
-        session.invalidate();
-        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
+    public String logout(HttpSession session) {
+        if(session != null){
+            session.invalidate();
+        }
+        return LOGOUT_SUCCESS.getDetail();
     }
 
     @GetMapping("/{memberId}")
@@ -42,5 +44,4 @@ public class MemberController {
         Member member = memberService.getById(id);
         return new ResponseEntity(member, HttpStatus.OK);
     }
-
 }

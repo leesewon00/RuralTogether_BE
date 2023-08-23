@@ -1,6 +1,7 @@
 package landvibe.test.service;
 
 import landvibe.test.domain.Member;
+import landvibe.test.exception.ErrorCode;
 import landvibe.test.exception.RuralException;
 import landvibe.test.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,31 +13,28 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class AdminService {
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public List<Member> findMembersApproveFalse() {
         Optional<List<Member>> byApproveFalse = memberRepository.findByApproveFalse();
         return byApproveFalse.orElse(null);
     }
 
-    @Transactional
-    public void approveMember(Long memberId) {
-        Optional<Member> byId = memberRepository.findById(memberId);
-        if (byId.isEmpty()) {
-            // 존재하지 않는 회원
-            throw new RuralException("존재하지 않는 회원");
-        }
-        byId.get().setApprove(true);
+    private Member checkValidMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuralException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
-    @Transactional
+    public void approveMember(Long memberId) {
+        Member member = checkValidMember(memberId);
+        member.setApprove(true);
+    }
+
     public void refuseMember(Long memberId) {
-        Optional<Member> byId = memberRepository.findById(memberId);
-        if (byId.isEmpty()) {
-            // 존재하지 않는 회원
-            throw new RuralException("존재하지 않는 회원");
-        }
+        checkValidMember(memberId);
         memberRepository.deleteById(memberId);
     }
 }

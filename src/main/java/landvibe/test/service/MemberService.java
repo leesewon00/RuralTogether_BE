@@ -9,28 +9,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static landvibe.test.exception.ErrorCode.*;
+
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    @Transactional
-    public void save(Member member) {
-        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
-            throw new RuralException("이미 등록되어 있는 회원");
+    private void checkDuplicatedEmail(String email) {
+        memberRepository.findByEmail(email).ifPresent(value -> {
+            throw new RuralException(DUPLICATED_MEMBER_EMAIL);
+        });
+    }
+
+    private Member checkValidMember(String email, String password) {
+        Member member = memberRepository.findByEmailAndPassword(email, password)
+                .orElseThrow(() -> new RuralException(INVALID_ID_PASSWORD));
+
+        if (member.getApprove().equals(false)) {
+            throw new RuralException(UNAUTHORIZED_USER);
         }
+        return member;
+    }
+
+    public void save(Member member) {
+        checkDuplicatedEmail(member.getEmail());
         memberRepository.save(member);
     }
 
-    public Member login(Member member) {
-        Optional<Member> optionalMember = memberRepository.findByEmailAndPassword(member.getEmail(), member.getPassword());
-        if (optionalMember.isEmpty()) {
-            throw new RuralException("아이디 또는 비밀번호 불일치");
-        }
-        if (optionalMember.get().getApprove().equals(false)) {
-            throw new RuralException("승인 대기중인 회원");
-        }
-        return optionalMember.get();
+    @Transactional(readOnly = true)
+    public Member login(String email, String password) {
+        return checkValidMember(email, password);
     }
 
     public Member getById(Long id) {

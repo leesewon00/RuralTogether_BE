@@ -1,8 +1,10 @@
 package landvibe.test.exception;
 
-public class RuralException extends RuntimeException{
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public RuralException(String message){
-        super(message);
-    }
+@Getter
+@AllArgsConstructor
+public class RuralException extends RuntimeException {
+    private final ErrorCode errorCode;
 }
