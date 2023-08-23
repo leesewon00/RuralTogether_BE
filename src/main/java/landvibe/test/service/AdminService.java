@@ -17,16 +17,13 @@ public class AdminService {
 
     public List<Member> findMembersApproveFalse() {
         Optional<List<Member>> byApproveFalse = memberRepository.findByApproveFalse();
-        if(byApproveFalse.isEmpty()){
-            return null;
-        }
-        return byApproveFalse.get();
+        return byApproveFalse.orElse(null);
     }
 
     @Transactional
-    public void approveMember(Long memberId) throws RuralException {
+    public void approveMember(Long memberId) {
         Optional<Member> byId = memberRepository.findById(memberId);
-        if(byId.isEmpty()){
+        if (byId.isEmpty()) {
             // 존재하지 않는 회원
             throw new RuralException("존재하지 않는 회원");
         }
@@ -34,9 +31,9 @@ public class AdminService {
     }
 
     @Transactional
-    public void refuseMember(Long memberId) throws RuralException {
+    public void refuseMember(Long memberId) {
         Optional<Member> byId = memberRepository.findById(memberId);
-        if(byId.isEmpty()){
+        if (byId.isEmpty()) {
             // 존재하지 않는 회원
             throw new RuralException("존재하지 않는 회원");
         }

@@ -1,8 +1,8 @@
 package landvibe.test.service;
 
-import landvibe.test.RegionName;
 import landvibe.test.domain.Board;
 import landvibe.test.domain.Member;
+import landvibe.test.exception.RuralException;
 import landvibe.test.repository.BoardRepository;
 import landvibe.test.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,12 @@ public class BoardService {
 
     @Transactional
     public Long saveBoard(Member member, Board board) {
-        board.setCreator(member); // 없는 맴버면 에러발생 가능, 에러 로직 아직 X
+        Optional<Member> byId = memberRepository.findById(member.getMemberId());
+        if (byId.isEmpty()) {
+            // 없는 맴버면 에러발생 가능
+            throw new RuralException("존재하지 않는 회원");
+        }
+        board.setCreator(member);
         Board saved = boardRepository.save(board);
         return saved.getBoardId();
     }
@@ -31,15 +36,22 @@ public class BoardService {
     }
 
     public List<Board> getBoardsByKeyword(String keyword) {
-        return boardRepository.findByTitleContaining(keyword);
+        Optional<List<Board>> byTitleContaining = boardRepository.findByTitleContaining(keyword);
+        return byTitleContaining.orElse(null);
     }
 
     public List<Board> getBoardsByRegion(String region) {
-        return boardRepository.findByRegionContaining(region);
+        Optional<List<Board>> byRegionContaining = boardRepository.findByRegionContaining(region);
+        return byRegionContaining.orElse(null);
     }
 
-    public Optional<Board> getBoardById(Long boardId) {
-        return boardRepository.findById(boardId);
+    public Board getBoardById(Long boardId) {
+        Optional<Board> byId = boardRepository.findById(boardId);
+        if (byId.isEmpty()) {
+            // 없는 게시글이면 에러발생 가능
+            throw new RuralException("존재하지 않는 게시글");
+        }
+        return boardRepository.findById(boardId).get();
     }
 
 }

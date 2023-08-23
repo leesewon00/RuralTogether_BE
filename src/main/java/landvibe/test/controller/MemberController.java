@@ -24,7 +24,7 @@ public class MemberController {
             throw new RuralException("이미 등록되어 있는 회원입니다.");
         }
         memberService.save(member);
-        return ResponseEntity.ok(memberService.getByEmail(member.getEmail()).get());
+        return ResponseEntity.ok("회원가입 성공");
     }
 
     @PostMapping("/login")
