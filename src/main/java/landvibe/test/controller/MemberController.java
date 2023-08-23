@@ -37,4 +37,10 @@ public class MemberController {
         return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
     }
 
+    @GetMapping("/{memberId}")
+    public ResponseEntity memberById(@PathVariable("memberId") Long id) {
+        Member member = memberService.getById(id);
+        return new ResponseEntity(member, HttpStatus.OK);
+    }
+
 }
