@@ -23,17 +23,14 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Member member, HttpSession session) {
-        member = memberService.login(member.getEmail(), member.getPassword());
-        session.setAttribute("loginMember", member);
+    public String login(@RequestBody Member member) {
+        memberService.login(member.getEmail(), member.getPassword());
         return LOGIN_SUCCESS.getDetail();
     }
 
     @PostMapping("/logout")
-    public String logout(HttpSession session) {
-        if(session != null){
-            session.invalidate();
-        }
+    public String logout() {
+        // no session
         return LOGOUT_SUCCESS.getDetail();
     }
 }
