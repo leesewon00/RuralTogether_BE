@@ -1,3 +1,4 @@
+/*
 package landvibe.test.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,3 +31,4 @@ public class SessionCheckInterceptor implements HandlerInterceptor {
     }
 
 }
+*/

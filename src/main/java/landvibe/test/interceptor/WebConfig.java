@@ -1,3 +1,5 @@
+
+/*
 package landvibe.test.interceptor;
 
 import org.springframework.context.annotation.Configuration;
@@ -22,3 +24,5 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 }
+
+*/

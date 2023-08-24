@@ -1,6 +1,5 @@
 package landvibe.test.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import landvibe.test.RegionName;
 import landvibe.test.domain.Board;
 import landvibe.test.domain.Member;
@@ -21,9 +20,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/new")
-    public String createBoard(@RequestBody Board board, HttpServletRequest request) {
-        Object creator = request.getSession().getAttribute("loginMember");
-        boardService.saveBoard((Member) creator, board);
+    public String createBoard(@RequestBody Board board) {
+        boardService.saveBoard(board);
         return VALID_BOARD_CREATE.getDetail();
     }
 

@@ -27,9 +27,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void saveBoard(Member member, Board board) {
-        checkValidMember(member.getMemberId());
-        board.setCreator(member);
+    public void saveBoard(Board board) {
         boardRepository.save(board);
     }
 

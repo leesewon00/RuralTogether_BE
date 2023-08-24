@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static landvibe.test.exception.ErrorCode.*;
 
+import static landvibe.test.exception.ErrorCode.*;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -41,9 +43,4 @@ public class MemberService {
         return checkValidMember(email, password);
     }
 
-    public Member getById(Long id) {
-        return memberRepository.findById(id).orElseThrow(
-                () -> new RuralException(NOT_FOUND_MEMBER)
-        );
-    }
 }
