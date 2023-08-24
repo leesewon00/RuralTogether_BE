@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import static landvibe.test.exception.ErrorCode.*;
 
 import static landvibe.test.exception.ErrorCode.*;
 
@@ -42,4 +42,5 @@ public class MemberService {
     public Member login(String email, String password) {
         return checkValidMember(email, password);
     }
+
 }

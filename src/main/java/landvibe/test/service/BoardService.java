@@ -21,6 +21,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
+    private Member checkValidMember(Long memberId){
+       return memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuralException(NOT_FOUND_MEMBER));
+    }
+
     @Transactional
     public void saveBoard(Board board) {
         boardRepository.save(board);

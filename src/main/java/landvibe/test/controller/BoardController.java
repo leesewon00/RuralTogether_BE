@@ -2,6 +2,7 @@ package landvibe.test.controller;
 
 import landvibe.test.RegionName;
 import landvibe.test.domain.Board;
+import landvibe.test.domain.Member;
 import landvibe.test.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
