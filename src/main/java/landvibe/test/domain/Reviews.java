@@ -16,18 +16,14 @@ public class Reviews {
     @ManyToOne
     @JoinColumn(name = "BOARD_ID")
     private Board targetBoard;
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member creator;
     @Column(name = "TITLE")
     private String title;
     @Column(name = "CONTENTS")
     private String contents;
 
     @Builder
-    public Reviews(Board targetBoard, Member creator, String title, String contents) {
+    public Reviews(Board targetBoard, String title, String contents) {
         this.targetBoard = targetBoard;
-        this.creator = creator;
         this.title = title;
         this.contents = contents;
     }

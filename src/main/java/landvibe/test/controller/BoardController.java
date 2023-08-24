@@ -36,39 +36,26 @@ public class BoardController {
      */
 
     @PostMapping("/new")
-    public ResponseEntity create(@RequestBody Board board, HttpServletRequest request) {
-        Object creator = request.getSession().getAttribute("loginMember");
-        if (creator == null) {
-            throw new RuralException("게시글은 로그인 뒤 작성할 수 있습니다.");
-        }
-
-        Long boardId = boardService.saveBoard((Member) creator, board);
+    public ResponseEntity create(@RequestBody Board board) {
+        Long boardId = boardService.saveBoard(board);
         return ResponseEntity.ok().body("게시글 등록 성공");
     }
 
     @GetMapping("")
     public ResponseEntity<List<Board>> getBoards() {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getAllBoard();
         return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
     }
 
     @GetMapping("/{boardId}")
     public ResponseEntity<Board> getBoard(@PathVariable("boardId") Long boardId) {
-        //세션 확인 안해도 되겠지?
-
         Board boardById = boardService.getBoardById(boardId);
-        // api로 넘겨줄 때는 form으로 바꿔서 전송해주는 것이 좋다. 그러나 일단 두자.
         return ResponseEntity.ok(boardById);
     }
 
     @GetMapping("/keyword")
     public ResponseEntity<List<Board>> getBoardsByKeyword(@RequestParam String keyword) {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getBoardsByKeyword(keyword);
-        // api로 넘겨줄 때는 form으로 바꿔서 전송해주는 것이 좋다. 그러나 일단 두자.
         return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
     }
 
@@ -78,10 +65,8 @@ public class BoardController {
 
     @GetMapping("/region")
     public ResponseEntity<List<Board>> getBoardsByRegion(@RequestParam RegionName region) {
-        //세션 확인 안해도 되겠지?
-
         List<Board> boards = boardService.getBoardsByRegion(region.message);
-        return ResponseEntity.ok(boards); // 비어있는 리스트 반환 가능
+        return ResponseEntity.ok(boards);
     }
 
 }

@@ -25,16 +25,9 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Member member, HttpSession session) {
+    public ResponseEntity login(@RequestBody Member member) {
         Member findMember = memberService.login(member);
-        session.setAttribute("loginMember", findMember);
         return new ResponseEntity("로그인 성공", HttpStatus.OK);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity logout(HttpSession session) {
-        session.invalidate();
-        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
     }
 
     @GetMapping("/{memberId}")

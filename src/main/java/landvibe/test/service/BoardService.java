@@ -20,13 +20,7 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long saveBoard(Member member, Board board) {
-        Optional<Member> byId = memberRepository.findById(member.getMemberId());
-        if (byId.isEmpty()) {
-            // 없는 맴버면 에러발생 가능
-            throw new RuralException("존재하지 않는 회원");
-        }
-        board.setCreator(member);
+    public Long saveBoard(Board board) {
         Board saved = boardRepository.save(board);
         return saved.getBoardId();
     }

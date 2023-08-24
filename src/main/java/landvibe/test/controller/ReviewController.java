@@ -27,12 +27,7 @@ public class ReviewController {
     @PostMapping("/new/{boardId}")
     public ResponseEntity create(@PathVariable("boardId") Long boardId,
                                  @RequestBody Reviews review, HttpServletRequest request) {
-        Object creator = request.getSession().getAttribute("loginMember");
-        if (creator == null) {
-            throw new RuralException("리뷰는 로그인 뒤 작성할 수 있습니다.");
-        }
-
-        reviewService.saveReview(boardId, (Member) creator, review);
+        reviewService.saveReview(boardId, review);
         return ResponseEntity.ok().body("리뷰 등록 성공");
     }
 

@@ -25,13 +25,12 @@ public class ReviewService {
     }
 
     @Transactional
-    public void saveReview(Long boardId, Member creator, Reviews review) {
+    public void saveReview(Long boardId, Reviews review) {
         Optional<Board> byId = boardRepository.findById(boardId);
         if (byId.isEmpty()) {
             throw new RuralException("리뷰는 존재하는 공고에만 작성할 수 있습니다.");
         }
         review.setTargetBoard(byId.get());
-        review.setCreator(creator);
         reviewRepository.save(review);
     }
 }
