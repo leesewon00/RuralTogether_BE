@@ -28,19 +28,21 @@ public class Board {
     @Column(name = "WORK_HOUR")
     private String workHour;
     @Column(name = "PAY")
-    private Long pay;
+    private String pay;
     @Column(name = "TYPE")
     private String type;
     @Column(name = "ROOM")
     private Boolean room;
     @Column(name = "MEAL")
     private Boolean meal;
+    @Column(name = "CREATOR_NAME")
+    private String creatorName;
     @Column(name = "CREATOR_NUMBER")
     private String creatorNumber;
 
     @Builder
     public Board(String title, String region, String location, String deadline, String workTerm, String workDay, String workHour,
-                 Long pay, String type, Boolean room, Boolean meal, String creatorNumber) {
+                 String pay, String type, Boolean room, Boolean meal, String creatorName, String creatorNumber) {
         this.title = title;
         this.region = region;
         this.location = location;
@@ -52,6 +54,7 @@ public class Board {
         this.type = type;
         this.room = room;
         this.meal = meal;
+        this.creatorName = creatorName;
         this.creatorNumber = creatorNumber;
     }
 }
